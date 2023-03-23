@@ -46,6 +46,9 @@ while running:
         space = False
         oppover = True
         figur.tilbakestill_fart(fart)
+
+    hinder = Hinder(600, 720, 8)
+    hinder.tegn_hinder(screen)
     
 
     # flip() the display to put your work on screen
