@@ -12,6 +12,8 @@ running = True
 fart = 13
 
 figur = Figur(300, 670, fart)
+hindre = []
+
 
 space = False
 oppover = True
@@ -47,8 +49,20 @@ while running:
         oppover = True
         figur.tilbakestill_fart(fart)
 
-    hinder = Hinder(600, 720, 8)
-    hinder.tegn_hinder(screen)
+    if len(hindre) == 0:
+        hinder = Hinder(1280, 620, 5)
+        hindre.append(hinder)
+    elif len(hindre) <= 2 and (hindre[0]).hent_x() < 590:
+        hinder = Hinder(1280, 620, 5)
+        hindre.append(hinder)
+
+    for hinder in hindre:
+        hinder.tegn_hinder(screen)
+        hinder.flytt_hinder()
+        if hinder.hent_x() <= -100:
+            hindre.remove(hinder)
+            del hinder
+    
     
 
     # flip() the display to put your work on screen
