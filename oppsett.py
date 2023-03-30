@@ -2,6 +2,9 @@
 import pygame
 from figur import Figur
 from hinder import Hinder
+from random import randint
+import math as m
+
 
 # pygame setup
 pygame.init()
@@ -13,10 +16,13 @@ fart = 13
 
 figur = Figur(300, 670, fart)
 hindre = []
+points = 0
 
 
 space = False
 oppover = True
+alive = True
+font = pygame.font.SysFont("Impact", 104)
 
 while running:
     # poll for events
@@ -36,33 +42,52 @@ while running:
     screen.fill("skyblue")
 
     # LAG SPILLET DIT HER:
-    figur.tegn_figur(screen)
-    if space and oppover:
-        if figur.get_y() <= 300:
-            oppover = False
+    if alive:
+        figur.tegn_figur(screen)
+        if space and oppover:
+            if figur.get_y() <= 300:
+                oppover = False
+            else:
+                figur.hopp_opp()
+        elif oppover == False and figur.get_y() <= 669:
+            figur.hopp_ned()
         else:
-            figur.hopp_opp()
-    elif oppover == False and figur.get_y() <= 669:
-        figur.hopp_ned()
-    else:
-        space = False
-        oppover = True
-        figur.tilbakestill_fart(fart)
+            space = False
+            oppover = True
+            figur.tilbakestill_fart(fart)
 
-    if len(hindre) == 0:
-        hinder = Hinder(1280, 620, 5)
-        hindre.append(hinder)
-    elif len(hindre) <= 2 and (hindre[0]).hent_x() < 590:
-        hinder = Hinder(1280, 620, 5)
-        hindre.append(hinder)
+        bredde = randint(100, 220)
+        hoyde = 320 - bredde
+        
+        if len(hindre) == 0:
+            hinder = Hinder(1280, (720-hoyde), 5, bredde, hoyde)
+            hindre.append(hinder)
+        elif len(hindre) < 2 and (hindre[0]).hent_x() < 590:
+            hinder = Hinder(1280, (720-hoyde), 5, bredde, hoyde)
+            hindre.append(hinder)
 
-    for hinder in hindre:
-        hinder.tegn_hinder(screen)
-        hinder.flytt_hinder()
-        if hinder.hent_x() <= -100:
-            hindre.remove(hinder)
-            del hinder
-    
+        for hinder in hindre:
+            hinder.tegn_hinder(screen)
+            hinder.flytt_hinder()
+            if hinder.hent_x() <= -100:
+                hindre.remove(hinder)
+                del hinder
+                points += 1
+                    
+
+                
+
+
+        if points >= 10:
+            score = font.render(f"{points}", True, (255, 255, 255))
+            screen.blit(score, (588, 20))
+        elif points >= 100:
+            score = font.render(f"{points}", True, (255, 255, 255))
+            screen.blit(score, (562, 20))
+        else:
+            score = font.render(f"{points}", True, (255, 255, 255))
+            screen.blit(score, (614, 20))
+        
     
 
     # flip() the display to put your work on screen

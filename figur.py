@@ -31,3 +31,5 @@ class Figur:
     def get_y(self):
         return self._y
     
+    def get_x(self):
+        return self._x
